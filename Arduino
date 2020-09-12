@@ -1,0 +1,96 @@
+//Peristaltic Pump Variables
+int motor_pin = A0; //for the motor
+int water_pump_duration; //water pump duration based on calculation using pot size
+
+//Ultrasonic Sensor Variables
+int trigger_pin = 2;
+int echo_pin = 3;
+int time;
+int distance;
+int water_distance = 5; //threshold for when to fill water reservoir
+
+//LED Variables
+int water_led_pin = 13; //red LED indicates water reservoir needs to be filled
+int checker_led_pin = 12; //green LED indicates the system is still running
+
+//User input Variables
+String plant_name; //plant name from user input
+int pot_size_inch = 4; //pot size in inches (INPUT PARAMETER HERE)
+
+//Soil Moisture Sensor Variables
+int sensor_pin = A2; //soil sensor input at analog pin
+int output_value;
+int potting_mix_ratio_dry = 1023; //conductivity of the potting mix when dry (INPUT PARAMETER HERE)
+int potting_mix_ratio_wet = 0; //conductivity of the potting mix when wet (INPUT PARAMETER HERE) 
+int plant_name_moisture = 70; //preferred plant moisture (INPUT PARAMETER HERE)
+int plant_name_frequency = 500; //preferred plant frequency (INPUT PARAMETER HERE)
+
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println(F("Smarty Plants"));
+  delay(1000);
+  pinMode(motor_pin, OUTPUT); //Set AO to an output so we can use it to turn on the transistor
+  pinMode(trigger_pin, OUTPUT);
+  pinMode(echo_pin, INPUT);
+  pinMode(water_led_pin, OUTPUT);
+  pinMode(checker_led_pin, OUTPUT);
+  
+  water_pump_duration = (1471.5*pot_size_inch - 4854.8)/50/1.25*1000; //water pump duration (INPUT PARAMETER HERE)
+}
+
+//Function that reads the soil moisture sensor
+void read_moisture_sensor () {
+  output_value = analogRead(sensor_pin);
+  output_value = map(output_value, potting_mix_ratio_dry, potting_mix_ratio_wet, 0, 100); //map(value, fromLow, from High, toLow, toHigh)
+  delay(1000);
+}
+
+//Function that reads the ultrasonic sensor 
+void read_ultrasonic_sensor() {  digitalWrite(trigger_pin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite (trigger_pin, LOW);
+  time = pulseIn (echo_pin, HIGH);
+  distance = (time * 0.034) / 2; //in centimeters
+}
+
+//Check the water water reservoir
+void check_water_reservoir() {
+  do {
+      digitalWrite (water_led_pin, HIGH);       
+      delay (500);
+      digitalWrite (water_led_pin, LOW);       
+      delay (500);
+      read_ultrasonic_sensor();
+  } while (distance >= water_distance);
+}
+
+//Turn on motor to water plant
+void water_plant () {
+  digitalWrite(motor_pin, HIGH); //turn on motor or water plants
+  delay(1000); // in milisecond (INSERT water_pump_duration PARAMETER HERE)
+  digitalWrite(motor_pin, LOW); //turn off motor or water plants to let the water flows more evenly
+  delay(1000); // in milisecond (INSERT water_pump_duration PARAMETER HERE)
+}
+
+
+void loop() {
+  //Turn on green LED
+  digitalWrite (checker_led_pin, HIGH);
+  delay (500);
+
+  read_moisture_sensor();
+
+  if (output_value <= plant_name_moisture) {
+    do {
+      read_ultrasonic_sensor();
+      if (distance >= water_distance) {
+        check_water_reservoir();
+      }
+        water_plant();
+        read_moisture_sensor();
+    } while (output_value <= plant_name_moisture);
+  }
+  digitalWrite(motor_pin, LOW); //turn off motor or stop water plant
+  delay(plant_name_frequency);
+}
