@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  
+  <body>
+    <h1 class="web_title">Smarty Plants</h1>
+    <h2 class="web_desc">Smarter Way to Grow Indoor Plants</h2>
+    <div class="container_your_plant">
+      <label class="label_your_plant" >Your Plant</label>
+    </div> 
+
+    <div id="container_main">
+      <div id="container_user_input">
+        <form action="/action_page.php" method="get">
+          <div class="row">
+            <div class="col-55">
+              <label for="pname">Enter plant name</label>
+            </div>
+            <div class="col-45i">
+              <input list="pnames" name="pname" id="pname">
+              <datalist id="pnames">
+              </datalist>
+            </div>
+          </div>
+
+          <div class="row">    
+            <div class="col-55">
+              <label for="psize">Enter pot size [inch]</label>
+            </div>
+            <div class="col-45i">
+              <input type="number" id="psize" name="psize" min="4" max="30" value="">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-55">
+              <label for="pratio">Potting soil : Perlite : Vermiculite</label>
+            </div>
+            <div class="col-45i">
+              <input list="pratios" name="pratio" id="pratio">
+              <datalist id="pratios">
+                
+              </datalist>
+            </div>
+          </div>
+        </form>
+        <form>
+          <button class="send_button" type="button" onclick="updateSetting()">Send</button> 
+        </form>
+      </div>
+
+      <div id="container_user_setting">
+        <div class="row">
+            <div class="col-55">
+              <label for="opump">Water pump duration</label> <!--calculated from pot size-->
+            </div>
+            <div class="col-45">
+              <label id="water_pump">???</label> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-55">
+              <label for="odry">Potting mix dry</label> <!--determined by potting mix ratio-->
+            </div>
+            <div class="col-45">
+              <label id="mix_dry">???</label> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-55">
+              <label for="owet">Potting mix wet</label> <!--determined by potting mix ratio-->
+            </div>
+            <div class="col-45">
+              <label id="mix_wet">???</label> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-55">
+              <label for="omoist">Plant moisture</label> <!--determined by plant name-->
+            </div>
+            <div class="col-45">
+              <label id="plant_moisture">???</label> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-55">
+              <label for="ofreq">Plant frequency</label> <!--determined by plant name--> 
+            </div>
+            <div class="col-45">
+              <label id="plant_freq">???</label> 
+            </div>
+        </div>
+      </div>
+      <div id="clear"></div>
+    </div>
+
+     <footer> <small>&copy; Copyright 2020, Lania P. Terisno. All Rights Reserved</small> </footer> 
+    <script src="script.js"></script>
+  </body>
+</html>
