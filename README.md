@@ -1,2 +1,4 @@
 # Smarty-Plants
 Smarty Plants is a Smart Solution for Indoor Plants.
+
+It uses an Arduino as its hardware component, and a web application as its user interface. The user will input their plant name, pot size, and potting mix ratio. In return, the user will receive their water pump duration, potting mix conductivity when dry and wet, preferred plant moisture, and preferred plant frequency. These parameters are used to customize the watering system. The Arduino uses a peristaltic pump to move the water from the water reservoir to the four output on the plant soil. The system will only water the plant if the soil moisture sensor reads that the soil is dry. The water reservoir has an ultrasonic sensor to check if there is enough water. If there is not enough water, a red LED will turn on and off until the water is filled. The system has a green LED that will always turn on when the system is running.
